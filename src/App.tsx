@@ -1,7 +1,3 @@
-
 export function App() {
-  return (
-    <h1>Ola Mundo</h1>
-  )
+  return <h1 className="text-red-500">Ola Mundo</h1>
 }
-
