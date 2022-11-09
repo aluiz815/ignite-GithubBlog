@@ -6,26 +6,41 @@ import {
   FaRegBuilding,
   FaUserFriends,
 } from 'react-icons/fa'
+import { PostProps } from '../Home'
+import { api } from '../../service/api'
+import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 
 export const Post = () => {
+  const params = useParams()
+  const id = params.id
+
+  const [post, setPost] = useState<PostProps>()
+
+  useEffect(() => {
+    async function getPosts() {
+      const response = await api.get(`/repos/daltonmenezes/test/issues/${id}`)
+      setPost(response.data)
+    }
+    getPosts()
+  }, [id])
+
   return (
     <div>
       <div className="p-10 bg-base-profile rounded-lg -mt-12 flex gap-8 ">
         <div className="flex flex-col justify-center items-start  w-full">
           <div className="flex justify-between items-center w-full">
-            <a
-              href="https://api.github.com/users/aluiz815"
-              target="_blank"
+            <Link
+              to="/"
               className="text-blue-theme font-bold text-xs flex gap-2"
-              rel="noreferrer"
             >
-              VER NO GITHUB
+              VOLTAR
               <FaExternalLinkAlt />
-            </a>
+            </Link>
             <a
-              href="https://api.github.com/users/aluiz815"
+              href={post?.user.html_url}
               target="_blank"
-              className="text-blue-theme font-bold text-xs flex gap-2"
+              className="text-blue-theme font-bold text-xs flex gap-2 cursor-pointer"
               rel="noreferrer"
             >
               VER NO GITHUB
@@ -34,7 +49,7 @@ export const Post = () => {
           </div>
 
           <h1 className="mt-5 text-base-title font-bold leading-tight text-2xl">
-            JavaScript data types and data structures
+            {post?.title}
           </h1>
 
           <div className="flex gap-6 pt-6">
@@ -54,17 +69,7 @@ export const Post = () => {
         </div>
       </div>
       <div className="mt-20 mb-60 p-10">
-        <ReactMarkdown className="text-base-text">
-          # André Luiz [![Github
-          Badge](https://img.shields.io/badge/-Github-000?style=flat-square&logo=Github&logoColor=white&link=https://github.com/lucasgdb)](https://github.com/aluiz815)
-          [![Linkedin
-          Badge](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/rebeccamanzi/)](https://www.linkedin.com/in/andr%C3%A9-luiz-90126716a/)
-          [![Gmail
-          Badge](https://img.shields.io/badge/-Gmail-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:rebeccamanzi@gmail.com)](mailto:aluizdev@gmail.com)
-          Hello! Welcome to my profile :smile: I'm André and I'm a fullstack
-          Developer and Salesforce Developer - ❤️ In love with JavaScript &
-          Typescript & LWC
-        </ReactMarkdown>
+        <ReactMarkdown className="text-base-text">{post?.body!}</ReactMarkdown>
       </div>
     </div>
   )
